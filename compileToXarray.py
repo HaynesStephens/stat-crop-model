@@ -36,11 +36,10 @@ W_shifts = [-50, -30, -10, 10, 30]
 for T_val in T_shifts:
     for model, climate in zip(models_phase2, climate_phase2):
         try:
-            x = 0 / 'A'
-            # CompilePhase2(model, climate, shift_coord='T', shift_val=T_val)
+            CompilePhase2(model, climate, shift_coord='T', shift_val=T_val)
+            print('{0} - T - {1} loaded.'.format(model, T_val))
         except:
-            print('WORKS')
-            # print('{0} - T - {1} DOES NOT EXIST'.format(model, T_val))
+            print('{0} - T - {1} DOES NOT EXIST.'.format(model, T_val))
             continue
 
 
