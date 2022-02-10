@@ -16,6 +16,7 @@ ds = xr.merge([xr.open_dataarray(name, decode_times=False).rename(var.split('-')
 ds['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
 # comment for commit
 ds = ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
+ds.maty.attrs["units"] = 'days from plant'
 
 # SAVE DATASET TO SEPARATE DIRECTORY
 save_dir = '/project2/moyer/ag_data/stat-mod-ds/'
