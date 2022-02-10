@@ -17,7 +17,9 @@ ds['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
 ds = ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
 
 # SAVE DATASET TO SEPARATE DIRECTORY
+save_dir = '/project2/moyer/ag_data/stat-mod-ds/'
 save_name = '{0}_{1}_cornbelt_1981_2010_C360_T{2}_W0_N200_A0.nc4'.format(model.lower(), climate.lower(), shift_val)
+ds.to_netcdf(save_dir+save_name)
 
 # LOOP THROUGH MODELS AND SCENARIOS
 
