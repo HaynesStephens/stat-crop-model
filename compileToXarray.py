@@ -42,6 +42,15 @@ for T_val in T_shifts:
             print('{0} - T - {1} DOES NOT EXIST.'.format(model, T_val))
             continue
 
+for W_val in W_shifts:
+    for model, climate in zip(models_phase2, climate_phase2):
+        try:
+            CompilePhase2(model, climate, shift_coord='W', shift_val=W_val)
+            print('{0} - W - {1} loaded.'.format(model, W_val))
+        except:
+            print('{0} - W - {1} DOES NOT EXIST.'.format(model, W_val))
+            continue
+
 
 # THEN GO ON TO PHASE 3
 
