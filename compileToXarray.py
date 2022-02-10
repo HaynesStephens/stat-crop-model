@@ -1,7 +1,7 @@
 import xarray as xr
 import pandas as pd
 
-def CompilePhase2(model, climate, shift_coord='T', shift_val='0'):
+def compilePhase2(model, climate, shift_coord='T', shift_val='0'):
     phase='phase2'
     load_path = '/project2/ggcmi/AgMIP.output/{0}/{1}/maize/A0/'.format(model, phase)
 
@@ -24,19 +24,22 @@ def CompilePhase2(model, climate, shift_coord='T', shift_val='0'):
     ds.to_netcdf(save_dir+save_name)
 
 # LOOP THROUGH MODELS
+'''
 models_phase2 = ['LPJmL', 'CARAIB', 'APSIM-UGOE', 'LPJ-GUESS', 'PROMET']
 climate_phase2 = ['AgMERRA', 'AgMERRA', 'AgMERRA', 'AgMERRA', 'ERAI']
 for model, climate in zip(models_phase2, climate_phase2):
-    CompilePhase2(model, climate)
+    compilePhase2(model, climate)
+'''
 
 # LOOP THROUGH SCENARIOS
+'''
 T_shifts = [2, 4, 6]
 W_shifts = [-50, -30, -10, 10, 30]
 
 for T_val in T_shifts:
     for model, climate in zip(models_phase2, climate_phase2):
         try:
-            CompilePhase2(model, climate, shift_coord='T', shift_val=T_val)
+            compilePhase2(model, climate, shift_coord='T', shift_val=T_val)
             print('{0} - T - {1} loaded.'.format(model, T_val))
         except:
             print('{0} - T - {1} DOES NOT EXIST.'.format(model, T_val))
@@ -45,14 +48,45 @@ for T_val in T_shifts:
 for W_val in W_shifts:
     for model, climate in zip(models_phase2, climate_phase2):
         try:
-            CompilePhase2(model, climate, shift_coord='W', shift_val=W_val)
+            compilePhase2(model, climate, shift_coord='W', shift_val=W_val)
             print('{0} - W - {1} loaded.'.format(model, W_val))
         except:
             print('{0} - W - {1} DOES NOT EXIST.'.format(model, W_val))
             continue
+'''
 
-
+#######################
 # THEN GO ON TO PHASE 3
+#######################
 
+models_phase3 = ['LPJmL', 'ACEA', 'LDNDC', 'PROMET']
+climate_phase3 = ['gfdl-esm4', 'ipsl-cm6a-lr', 'mpi-esm1-2-hr', 'mri-esm2-0', 'ukesm1-0-ll']
 
+def compilePhase3(model, climate, scenario):
+    # GATHER NAMING INFORMATION FOR FILES
+    phase = 'phase3a' if (scenario == 'obsclim') else 'phase3b'
+    load_path = '/project2/ggcmi/AgMIP.output/{0}/{1}/{2}/{3}/mai/'.format(model, phase, climate, scenario)   
+    scen_time = {'obsclim':'1901_2016'} 
+    scen_cond = {'obsclim':'2015soc_default'}
 
+    # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
+    vars = ['yield', 'plantday', 'matyday', 'soilmoist1m']
+    vars_time = dict(zip(vars), ['annual', 'annual', 'annual', 'monthly'])
+    def writeFilepath(var):
+        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model, climate, scenario, 
+                                                                        scen_cond[scenario], var, vars_time[var], 
+                                                                        scen_time[scenario])
+
+    file_paths = [load_path + writeFilepath(var) for var in vars]
+    return file_paths
+
+compilePhase3('LPJmL', 'gswp3-w5e5', 'obsclim')
+    # ds = xr.merge([xr.open_dataarray(name, decode_times=False).rename(var.split('-')[0]) for name, var in zip(file_paths,vars)])
+    # ds['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
+    # ds = ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
+    # ds.maty.attrs["units"] = 'days from plant'
+
+    # # SAVE DATASET TO SEPARATE DIRECTORY
+    # save_dir = '/project2/moyer/ag_data/stat-mod-ds/phase2/'
+    # save_name = '{0}_{1}_cornbelt_1981_2010_{2}_A0.nc4'.format(model.lower(), climate.lower(), shift_str)
+    # ds.to_netcdf(save_dir+save_name)
