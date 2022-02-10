@@ -1,4 +1,5 @@
 import xarray as xr
+import pandas as pd
 
 phase = 'phase2'
 models_phase2 = ['LPJmL', 'CARAIB', 'APSIM-UGOE', 'LPJ-GUESS', 'PROMET']
@@ -8,11 +9,9 @@ load_path = '/project2/ggcmi/AgMIP.output/{0}/{1}/maize/A0/'.format(model, phase
 
 var = 'yield'
 shift_coord = 'T'
-shift_range = [0, 2, 4, 6]
-file_path = load_path + '{0}/{1}_{2}_fullharm_{0}_mai_global_annual_1980_2010_C360_T*_W0_N200_A0.nc4'.format(var, model.lower(), climate.lower())
-
-ds = xr.open_mfdataset(file_path)
-
+shift_val = 0
+file_path = load_path + '{0}/{1}_{2}_fullharm_{0}_mai_global_annual_1980_2010_C360_T{3}_W0_N200_A0.nc4'.format(var, model.lower(), climate.lower(), shift_val)
+ds = xr.load_dataset(file_path, decode_times=False)
 
 
 
