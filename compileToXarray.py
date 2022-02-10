@@ -8,7 +8,7 @@ def CompilePhase2(model, climate, shift_coord='T', shift_val='0'):
     load_path = '/project2/ggcmi/AgMIP.output/{0}/{1}/maize/A0/'.format(model, phase)
 
     # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
-    vars = ['yield', 'plant-day', 'maty-day', 'trzpah2o', 'runoff']
+    vars = ['yield', 'plant-day', 'maty-day', 'trzpah2o']#, 'runoff'] No RUNOFF for PROMET
     scen_vals = {'C':360, 'T':0, 'W':0, 'N':200}
     scen_vals[shift_coord] = shift_val
     if model=='CARAIB': scen_vals['N'] = 'NA'
@@ -23,7 +23,7 @@ def CompilePhase2(model, climate, shift_coord='T', shift_val='0'):
 
     # SAVE DATASET TO SEPARATE DIRECTORY
     save_dir = '/project2/moyer/ag_data/stat-mod-ds/'
-    save_name = '{0}_{1}_cornbelt_1981_2010_C360_T{2}_W0_N200_A0.nc4'.format(model.lower(), climate.lower(), shift_val)
+    save_name = '{0}_{1}_cornbelt_1981_2010_{2}_A0.nc4'.format(model.lower(), climate.lower(), shift_str)
     ds.to_netcdf(save_dir+save_name)
 
 # LOOP THROUGH MODELS AND SCENARIOS
