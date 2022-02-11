@@ -129,7 +129,7 @@ for model in models_phase3:
     for climate in climate_phase3b:
         for scenario in scenarios_phase3b:
             try:
-                    out = compilePhase3(model, climate, scenario)
-                except:
-                    print('{0} - {1} - {2} - DOES NOT EXIST'.format(model, climate, scenario))
+                out = compilePhase3(model, climate, scenario)
+            except:
+                print('{0} - {1} - {2} - DOES NOT EXIST'.format(model, climate, scenario))
 
