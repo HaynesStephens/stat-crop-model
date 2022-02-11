@@ -70,7 +70,7 @@ def compilePhase3(model, climate, scenario):
                  'picontrol':'1850_2100',
                  'ssp126':'2015_2100',
                  'ssp585':'2015_2100'}
-    if (scenario=='obsclim') and (model=='PROMET'): scen_time[model] = '1980_2010'
+    if (scenario=='obsclim') and (model=='PROMET'): scen_time[scenario] = '1980_2010'
 
     scen_cond = {'obsclim':'2015soc_default',
                  'historical':'2015soc_default',
