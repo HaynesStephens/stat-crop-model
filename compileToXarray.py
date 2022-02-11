@@ -74,7 +74,7 @@ def compilePhase3(model, climate, scenario):
     vars_time = dict(zip(vars, ['annual', 'annual', 'annual', 'monthly']))
 
     def writeFilepath(var):
-        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model, climate, scenario,
+        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model.lower(), climate, scenario,
                                                                         scen_cond[scenario], var, 
                                                                         vars_time[var], scen_time[scenario])
 
