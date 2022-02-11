@@ -81,7 +81,7 @@ def compilePhase3(model, climate, scenario):
     file_paths = [load_path + writeFilepath(var) for var in vars]
 
     def loadArr(file_path, var):
-        ds = xr.open_dataset(file_path, decode_times=False)
+        ds = xr.open_dataarray(file_path, decode_times=False).rename(var)
         start = scen_time[scenario].split('_')[0]
         p = ds.time.size
         if vars_time[var] == 'annual':
