@@ -72,15 +72,30 @@ def compilePhase3(model, climate, scenario):
     # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
     vars = ['yield', 'plantday', 'matyday', 'soilmoist1m']
     vars_time = dict(zip(vars, ['annual', 'annual', 'annual', 'monthly']))
+
     def writeFilepath(var):
-        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model, climate, scenario, 
-                                                                        scen_cond[scenario], var, vars_time[var], 
-                                                                        scen_time[scenario])
+        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model, climate, scenario,
+                                                                        scen_cond[scenario], var, 
+                                                                        vars_time[var], scen_time[scenario])
 
     file_paths = [load_path + writeFilepath(var) for var in vars]
-    return file_paths
+
+    def loadArr(file_path, var):
+        ds = xr.open_dataset(file_path, decode_times=False)
+        start = scen_time[scenario].split('_')[0]
+        p = ds.time.size
+        if vars_time[var] == 'annual':
+            ds['time'] = pd.date_range(start=start, periods=p, freq='A')
+        elif vars_time[var] == 'monthly':
+            ds['time'] = pd.date_range(start=start, periods=p, freq='A')
+        return ds
+    
+    ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
+    
+    return ds
 
 out = compilePhase3('LPJmL', 'gswp3-w5e5', 'obsclim')
+
     # ds = xr.merge([xr.open_dataarray(name, decode_times=False).rename(var.split('-')[0]) for name, var in zip(file_paths,vars)])
     # ds['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
     # ds = ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
