@@ -77,7 +77,7 @@ def compilePhase3(model, climate, scenario, ssp2015co2=True):
                  'picontrol':'2015soc_1850co2',
                  'ssp126':'2015soc_default',
                  'ssp585':'2015soc_default'}
-    if ssp2015co2: scen_cond[scenario] = '2015soc_2015co2'
+    if (scenario in ['ssp126', 'ssp585']) and (ssp2015co2): scen_cond[scenario] = '2015soc_2015co2'
     
     # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
     vars = ['yield', 'plantday', 'matyday', 'soilmoist1m']
