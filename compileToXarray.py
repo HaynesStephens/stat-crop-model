@@ -120,6 +120,6 @@ for climate in climate_phase3a:
     for scenario in scenarios_phase3a:
         out = compilePhase3('LPJmL', climate, scenario)
 
-for climate in climate_phase3b:
+for climate in climate_phase3b[:1]:
     for scenario in scenarios_phase3b:
         out = compilePhase3('LPJmL', climate, scenario)
