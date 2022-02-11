@@ -96,12 +96,6 @@ def compilePhase3(model, climate, scenario):
     save_dir = '/project2/moyer/ag_data/stat-mod-ds/{0}/'.format(phase)
     save_name = '{0}_{1}_{2}_{3}_mai-noirr_cornbelt_{4}.nc'.format(model.lower(), climate, scenario,
                                                                         scen_cond[scenario], scen_time[scenario])
-    # ds.to_netcdf(save_dir+save_name)
-    print(save_name)
-
-    return ds
+    ds.to_netcdf(save_dir+save_name)
 
 out = compilePhase3('LPJmL', 'gswp3-w5e5', 'obsclim')
-
-    # save_name = '{0}_{1}_cornbelt_1981_2010_{2}_A0.nc4'.format(model.lower(), climate.lower(), shift_str)
-    # ds.to_netcdf(save_dir+save_name)
