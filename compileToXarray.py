@@ -59,43 +59,63 @@ for W_val in W_shifts:
 # THEN GO ON TO PHASE 3
 #######################
 
-models_phase3 = ['LPJmL', 'ACEA', 'LDNDC', 'PROMET']
-climate_phase3 = ['gfdl-esm4', 'ipsl-cm6a-lr', 'mpi-esm1-2-hr', 'mri-esm2-0', 'ukesm1-0-ll']
-
 def compilePhase3(model, climate, scenario):
     # GATHER NAMING INFORMATION FOR FILES
     phase = 'phase3a' if (scenario == 'obsclim') else 'phase3b'
     load_path = '/project2/ggcmi/AgMIP.output/{0}/{1}/{2}/{3}/mai/'.format(model, phase, climate, scenario)   
-    scen_time = {'obsclim':'1901_2016'} 
-    scen_cond = {'obsclim':'2015soc_default'}
+
+    scen_time = {'obsclim':'1901_2016', 
+                 'historical':'1850_2014',
+                 'picontrol':'1850_2100',
+                 'ssp126':'2015_2100',
+                 'ssp585':'2015_2100'}
+
+    scen_cond = {'obsclim':'2015soc_default',
+                 'historical':'2015soc_default',
+                 'picontrol':'2015soc_1850co2',
+                 'ssp126':'2015soc_2015co2',
+                 'ssp585':'2015soc_2015co2'}
 
     # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
     vars = ['yield', 'plantday', 'matyday', 'soilmoist1m']
     vars_time = dict(zip(vars, ['annual', 'annual', 'annual', 'monthly']))
 
     def writeFilepath(var):
-        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model.lower(), climate, scenario,
+        scen_ext = '' if (scenario == 'obsclim') else 'w5e5_'
+        return '{0}_{1}_{2}_{3}_{4}-mai-noirr_global_{5}_{6}.nc'.format(model.lower(), climate, scen_ext+scenario,
                                                                         scen_cond[scenario], var, 
                                                                         vars_time[var], scen_time[scenario])
 
     file_paths = [load_path + writeFilepath(var) for var in vars]
+    for path in file_paths:
+        print(path)
 
-    def loadArr(file_path, var):
-        ds = xr.open_dataarray(file_path, decode_times=False).rename(var)
-        start = scen_time[scenario].split('_')[0]
-        p = ds.time.size
-        if vars_time[var] == 'annual':
-            ds['time'] = pd.date_range(start=start, periods=p, freq='A')
-        elif vars_time[var] == 'monthly':
-            ds['time'] = pd.date_range(start=start, periods=p, freq='M')
-        return ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75))
+    # def loadArr(file_path, var):
+    #     ds = xr.open_dataarray(file_path, decode_times=False).rename(var)
+    #     start = scen_time[scenario].split('_')[0]
+    #     p = ds.time.size
+    #     if vars_time[var] == 'annual':
+    #         ds['time'] = pd.date_range(start=start, periods=p, freq='A')
+    #     elif vars_time[var] == 'monthly':
+    #         ds['time'] = pd.date_range(start=start, periods=p, freq='M')
+    #     return ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75))
     
-    ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
+    # ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
 
-    # SAVE DATASET TO SEPARATE DIRECTORY
-    save_dir = '/project2/moyer/ag_data/stat-mod-ds/{0}/'.format(phase)
-    save_name = '{0}_{1}_{2}_{3}_mai-noirr_cornbelt_{4}.nc'.format(model.lower(), climate, scenario,
-                                                                        scen_cond[scenario], scen_time[scenario])
-    ds.to_netcdf(save_dir+save_name)
+    # # SAVE DATASET TO SEPARATE DIRECTORY
+    # save_dir = '/project2/moyer/ag_data/stat-mod-ds/{0}/'.format(phase)
+    # save_name = '{0}_{1}_{2}_{3}_mai-noirr_cornbelt_{4}.nc'.format(model.lower(), climate, scenario,
+    #                                                                     scen_cond[scenario], scen_time[scenario])
+    # ds.to_netcdf(save_dir+save_name)
 
-out = compilePhase3('LPJmL', 'gswp3-w5e5', 'obsclim')
+models_phase3 = ['LPJmL', 'ACEA', 'LDNDC', 'PROMET']
+
+climate_phase3a = ['gswp3-w5e5']
+scenarios_phase3a = ['obsclim']
+
+climate_phase3b = ['gfdl-esm4', 'ipsl-cm6a-lr', 'mpi-esm1-2-hr', 'mri-esm2-0', 'ukesm1-0-ll']
+scenarios_phase3b = ['historical', 'picontrol',  'ssp126', 'ssp585']
+
+for climate in climate_phase3a:
+    for scenario in scenarios_phase3a:
+        out = compilePhase3('LPJmL', climate, scenario)
