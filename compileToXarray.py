@@ -87,25 +87,26 @@ def compilePhase3(model, climate, scenario):
                                                                         vars_time[var], scen_time[scenario])
 
     file_paths = [load_path + writeFilepath(var) for var in vars]
-    for path in file_paths:
-        print(path)
 
-    # def loadArr(file_path, var):
-    #     ds = xr.open_dataarray(file_path, decode_times=False).rename(var)
-    #     start = scen_time[scenario].split('_')[0]
-    #     p = ds.time.size
-    #     if vars_time[var] == 'annual':
-    #         ds['time'] = pd.date_range(start=start, periods=p, freq='A')
-    #     elif vars_time[var] == 'monthly':
-    #         ds['time'] = pd.date_range(start=start, periods=p, freq='M')
-    #     return ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75))
+    def loadArr(file_path, var):
+        ds = xr.open_dataarray(file_path, decode_times=False).rename(var)
+        start = scen_time[scenario].split('_')[0]
+        p = ds.time.size
+        if vars_time[var] == 'annual':
+            ds['time'] = pd.date_range(start=start, periods=p, freq='A')
+        elif vars_time[var] == 'monthly':
+            ds['time'] = pd.date_range(start=start, periods=p, freq='M')
+        return ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75))
     
-    # ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
+    ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
 
-    # # SAVE DATASET TO SEPARATE DIRECTORY
-    # save_dir = '/project2/moyer/ag_data/stat-mod-ds/{0}/'.format(phase)
-    # save_name = '{0}_{1}_{2}_{3}_mai-noirr_cornbelt_{4}.nc'.format(model.lower(), climate, scenario,
-    #                                                                     scen_cond[scenario], scen_time[scenario])
+    # SAVE DATASET TO SEPARATE DIRECTORY
+    save_dir = '/project2/moyer/ag_data/stat-mod-ds/{0}/'.format(phase)
+    save_name = '{0}_{1}_{2}_{3}_mai-noirr_cornbelt_{4}.nc'.format(model.lower(), climate, scenario,
+                                                                        scen_cond[scenario], scen_time[scenario])
+
+    print(save_name)
+    return ds
     # ds.to_netcdf(save_dir+save_name)
 
 models_phase3 = ['LPJmL', 'ACEA', 'LDNDC', 'PROMET']
@@ -120,6 +121,6 @@ for climate in climate_phase3a:
     for scenario in scenarios_phase3a:
         out = compilePhase3('LPJmL', climate, scenario)
 
-for climate in climate_phase3b[:1]:
+for climate in climate_phase3b:
     for scenario in scenarios_phase3b:
         out = compilePhase3('LPJmL', climate, scenario)
