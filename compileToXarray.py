@@ -87,7 +87,7 @@ def compilePhase3(model, climate, scenario):
         if vars_time[var] == 'annual':
             ds['time'] = pd.date_range(start=start, periods=p, freq='A')
         elif vars_time[var] == 'monthly':
-            ds['time'] = pd.date_range(start=start, periods=p, freq='A')
+            ds['time'] = pd.date_range(start=start, periods=p, freq='M')
         return ds
     
     ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
