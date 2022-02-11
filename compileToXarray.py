@@ -110,6 +110,7 @@ def compilePhase3(model, climate, scenario, ssp2015co2=True):
 
     print(save_name)
     ds.to_netcdf(save_dir+save_name)
+    return ds
 
 models_phase3 = ['LPJmL', 'ACEA', 'LDNDC', 'PROMET']
 
