@@ -70,13 +70,14 @@ def compilePhase3(model, climate, scenario):
                  'picontrol':'1850_2100',
                  'ssp126':'2015_2100',
                  'ssp585':'2015_2100'}
+    if (scenario=='obsclim') and (model=='PROMET'): scen_time[model] = '1980_2010'
 
     scen_cond = {'obsclim':'2015soc_default',
                  'historical':'2015soc_default',
                  'picontrol':'2015soc_1850co2',
                  'ssp126':'2015soc_2015co2',
                  'ssp585':'2015soc_2015co2'}
-
+    
     # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
     vars = ['yield', 'plantday', 'matyday', 'soilmoist1m']
     vars_time = dict(zip(vars, ['annual', 'annual', 'annual', 'monthly']))
@@ -118,19 +119,21 @@ scenarios_phase3a = ['obsclim']
 climate_phase3b = ['gfdl-esm4', 'ipsl-cm6a-lr', 'mpi-esm1-2-hr', 'mri-esm2-0', 'ukesm1-0-ll']
 scenarios_phase3b = ['historical', 'picontrol',  'ssp126', 'ssp585']
 
-for model in models_phase3:
-    for climate in climate_phase3a:
-        for scenario in scenarios_phase3a:
-            try:
-                out = compilePhase3(model, climate, scenario)
-            except:
-                print('{0} - {1} - {2} - DOES NOT EXIST'.format(model, climate, scenario))
+out = compilePhase3('PROMET', 'gswp3-w5e5', 'obsclim')
 
-for model in models_phase3:
-    for climate in climate_phase3b:
-        for scenario in scenarios_phase3b:
-            try:
-                out = compilePhase3(model, climate, scenario)
-            except:
-                print('{0} - {1} - {2} - DOES NOT EXIST'.format(model, climate, scenario))
+# for model in models_phase3:
+#     for climate in climate_phase3a:
+#         for scenario in scenarios_phase3a:
+#             try:
+#                 out = compilePhase3(model, climate, scenario)
+#             except:
+#                 print('{0} - {1} - {2} - DOES NOT EXIST'.format(model, climate, scenario))
+
+# for model in models_phase3:
+#     for climate in climate_phase3b:
+#         for scenario in scenarios_phase3b:
+#             try:
+#                 out = compilePhase3(model, climate, scenario)
+#             except:
+#                 print('{0} - {1} - {2} - DOES NOT EXIST'.format(model, climate, scenario))
 
