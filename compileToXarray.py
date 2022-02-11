@@ -88,7 +88,7 @@ def compilePhase3(model, climate, scenario):
             ds['time'] = pd.date_range(start=start, periods=p, freq='A')
         elif vars_time[var] == 'monthly':
             ds['time'] = pd.date_range(start=start, periods=p, freq='M')
-        return ds
+        return ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75))
     
     ds = xr.merge([loadArr(path, var) for path, var in zip(file_paths, vars)])
     
@@ -96,9 +96,6 @@ def compilePhase3(model, climate, scenario):
 
 out = compilePhase3('LPJmL', 'gswp3-w5e5', 'obsclim')
 
-    # ds = xr.merge([xr.open_dataarray(name, decode_times=False).rename(var.split('-')[0]) for name, var in zip(file_paths,vars)])
-    # ds['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
-    # ds = ds.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
     # ds.maty.attrs["units"] = 'days from plant'
 
     # # SAVE DATASET TO SEPARATE DIRECTORY
