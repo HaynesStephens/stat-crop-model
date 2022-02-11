@@ -62,6 +62,7 @@ for W_val in W_shifts:
 def compilePhase3(model, climate, scenario):
     # GATHER NAMING INFORMATION FOR FILES
     phase = 'phase3a' if (scenario == 'obsclim') else 'phase3b'
+    if (scenario=='obsclim') and (model=='PROMET'): climate = 'wfde5'
     load_path = '/project2/ggcmi/AgMIP.output/{0}/{1}/{2}/{3}/mai/'.format(model, phase, climate, scenario)   
 
     scen_time = {'obsclim':'1901_2016', 
