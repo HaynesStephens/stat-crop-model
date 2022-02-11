@@ -59,7 +59,7 @@ for W_val in W_shifts:
 # THEN GO ON TO PHASE 3
 #######################
 
-def compilePhase3(model, climate, scenario):
+def compilePhase3(model, climate, scenario, ssp2015co2=True):
     # GATHER NAMING INFORMATION FOR FILES
     phase = 'phase3a' if (scenario == 'obsclim') else 'phase3b'
     if (scenario=='obsclim') and (model=='PROMET'): climate = 'wfde5'
@@ -75,8 +75,9 @@ def compilePhase3(model, climate, scenario):
     scen_cond = {'obsclim':'2015soc_default',
                  'historical':'2015soc_default',
                  'picontrol':'2015soc_1850co2',
-                 'ssp126':'2015soc_2015co2',
-                 'ssp585':'2015soc_2015co2'}
+                 'ssp126':'2015soc_default',
+                 'ssp585':'2015soc_default'}
+    if ssp2015co2: scen_cond[scenario] = '2015soc_2015co2'
     
     # LOAD DATASET WITH ALL VARIABLES FOR A GIVEN SCENARIO 
     vars = ['yield', 'plantday', 'matyday', 'soilmoist1m']
@@ -119,7 +120,7 @@ scenarios_phase3a = ['obsclim']
 climate_phase3b = ['gfdl-esm4', 'ipsl-cm6a-lr', 'mpi-esm1-2-hr', 'mri-esm2-0', 'ukesm1-0-ll']
 scenarios_phase3b = ['historical', 'picontrol',  'ssp126', 'ssp585']
 
-out = compilePhase3('PROMET', 'gswp3-w5e5', 'obsclim')
+out = compilePhase3('ACEA', 'gfdl-esm4', 'ssp126', ssp2015co2=False)
 
 # for model in models_phase3:
 #     for climate in climate_phase3a:
