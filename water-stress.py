@@ -4,7 +4,6 @@ import pandas as pd
 
 model = 'LPJmL'
 var = 'transp'
-T = 0
 basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A0/{1}/'.format(model,var)
 
 def loadArr(model, var, T, W, N='200'):
@@ -26,3 +25,4 @@ def calcWStress(model, var, T, N='200'):
 w_stress = xr.concat([calcWStress(model, var, Ti, N='200') for Ti in np.arange(0,7,2)], dim='Tshift')
 w_stress = w_stress.to_dataframe().reset_index()
 w_stress['time'] = w_stress.time.dt.year
+w_stress.to_csv('/project2/moyer/ag_data/wstress/UW_{0}_{1}_stress.csv'.format(model,var))
