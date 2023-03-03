@@ -24,4 +24,5 @@ def calcWStress(model, var, T, N='200'):
     return w_stress
 
 w_stress = xr.concat([calcWStress(model, var, Ti, N='200') for Ti in np.arange(0,7,2)], dim='Tshift')
-
+w_stress = w_stress.to_dataframe().reset_index()
+w_stress['time'] = w_stress.time.dt.year
