@@ -1,3 +1,4 @@
+# IMPORTS
 import xarray as xr
 import numpy as np
 import pandas as pd
@@ -24,7 +25,6 @@ def calcWStress(model, var, T):
 
 # model = 'LPJmL'
 # var = 'transp'
-basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A0/{1}/'.format(model,var)
 models = ['LPJmL','CARAIB','LPJ-GUESS','GEPIC','PEPIC','EPIC-TAMU','pDSSAT']
 
 for model in models:
@@ -34,6 +34,8 @@ for model in models:
         vars = ['transp']
     for var in vars:
         print(model, var)
+        basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A0/{1}/'.format(model,var)
+        
         w_stress = xr.concat([calcWStress(model, var, Ti) for Ti in np.arange(0,7,2)], dim='Tshift')
         w_stress = w_stress.to_dataframe().reset_index()
         w_stress['time'] = w_stress.time.dt.year
