@@ -14,6 +14,14 @@ def loadArr(model, var, T, W, N='200'):
     da = da.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
     return da
 
-winf    = loadArr(model, var, T, 'inf')
-w0      = loadArr(model, var, T, 0)
+def calcWStress(model, var, T, N='200'):
+    w_rf = loadArr(model, var, T, 0, N=N).rename(var+'_rf')
+    w_ir = loadArr(model, var, T, 'inf', N=N).rename(var+'_ir')
+    w_stress = xr.merge([w_rf, w_ir])
+    w_stress = w_stress.where(w_stress[var+'_ir']>0)
+    w_stress[var+'_stress'] = 1 - (w_stress[var+'_rf'] / w_stress[var+'_ir'])
+    w_stress = w_stress.expand_dims({'Tshift':[T]})
+    return w_stress
+
+w_stress = xr.concat([calcWStress(model, var, Ti, N='200') for Ti in np.arange(0,7,2)], dim='Tshift')
 
