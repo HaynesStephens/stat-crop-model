@@ -25,13 +25,10 @@ def calcWStress(model, var, T):
 
 # model = 'LPJmL'
 # var = 'transp'
-models = ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT'] #'GEPIC','PEPIC', 'EPIC-TAMU'
+models = ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC', 'EPIC-TAMU']
 
 for model in models:
-    if model in ['LPJmL','CARAIB','LPJ-GUESS']:
-        vars = ['transp','trzpah2o']
-    else:
-        vars = ['transp']
+    vars = ['etransp']
     for var in vars:
         print(model, var)
         basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A0/{1}/'.format(model,var)
