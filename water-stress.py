@@ -28,12 +28,21 @@ def calcWStress(model, var, T):
 models = ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC', 'EPIC-TAMU']
 
 for model in models:
-    vars = ['etransp']
+    if model in ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT']:
+        vars = ['etransp', 'transp']
+    else: 
+        vars = ['etransp']
     for var in vars:
         print(model, var)
         basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A0/{1}/'.format(model,var)
-
-        w_stress = xr.concat([calcWStress(model, var, Ti) for Ti in np.arange(0,7,2)], dim='Tshift')
+        w_stress_list = []
+        for Ti in np.arange(0,7,2):
+            try: 
+                da = calcWStress(model, var, Ti)
+                w_stress_list.append(da)
+            except:
+                continue
+        w_stress = xr.concat([w_stress_list], dim='Tshift')
         w_stress = w_stress.to_dataframe().reset_index()
         w_stress['time'] = w_stress.time.dt.year
         w_stress.to_csv('/project2/moyer/ag_data/wstress/UW_{0}_{1}_stress.csv'.format(model,var), index=False)
