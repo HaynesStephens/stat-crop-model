@@ -9,9 +9,9 @@ def loadArr(model, var, T, W):
     else:
         N = '200'
     if T==0:
-        A==0
+        A=0
     else: 
-        A==1
+        A=1
     da = '{0}_agmerra_fullharm_{1}_mai_global_annual_1980_2010_C360_T{2}_W{3}_N{4}_A{5}.nc4'.format(model.lower(), var, T, W, N,A)
     da = xr.open_dataarray( basedir + da , decode_times=False)
     da['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
@@ -42,9 +42,9 @@ for model in models:
         w_stress_list = []
         for Ti in np.arange(0,7,2):
             if Ti==0:
-                A==0
+                A=0
             else: 
-                A==1
+                A=1
             basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A{2}/{1}/'.format(model,var,A)
             try: 
                 da = calcWStress(model, var, Ti)
