@@ -54,5 +54,4 @@ for model in models:
         w_stress = xr.concat(w_stress_list, dim='Tshift')
         w_stress = w_stress.to_dataframe().reset_index()
         w_stress['time'] = w_stress.time.dt.year
-        test
         w_stress.to_csv('/project2/moyer/ag_data/wstress/UWA1_{0}_{1}_stress.csv'.format(model,var), index=False)
