@@ -8,7 +8,11 @@ def loadArr(model, var, T, W):
         N = 'NA'
     else:
         N = '200'
-    da = '{0}_agmerra_fullharm_{1}_mai_global_annual_1980_2010_C360_T{2}_W{3}_N{4}_A0.nc4'.format(model.lower(), var, T, W, N)
+    if T==0:
+        A==0
+    else: 
+        A==1
+    da = '{0}_agmerra_fullharm_{1}_mai_global_annual_1980_2010_C360_T{2}_W{3}_N{4}_A{5}.nc4'.format(model.lower(), var, T, W, N,A)
     da = xr.open_dataarray( basedir + da , decode_times=False)
     da['time'] = pd.date_range(start='12-31-1980', periods=31, freq='A')
     da = da.sel(lat=slice(48.75, 36.25), lon=slice(-103.8, -80.75), time=slice('1981', '2010'))
@@ -25,18 +29,23 @@ def calcWStress(model, var, T):
 
 # model = 'LPJmL'
 # var = 'transp'
-models = ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC', 'EPIC-TAMU']
+models = ['LPJmL']#,'CARAIB','LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC', 'EPIC-TAMU']
+vars = ['trzpah2o', 'transp']
 
 for model in models:
-    if model in ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT']:
-        vars = ['etransp', 'transp']
-    else: 
-        vars = ['etransp']
+    # if model in ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT']:
+    #     vars = ['etransp', 'transp']
+    # else: 
+    #     vars = ['etransp']
     for var in vars:
         print(model, var)
-        basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A0/{1}/'.format(model,var)
         w_stress_list = []
         for Ti in np.arange(0,7,2):
+            if Ti==0:
+                A==0
+            else: 
+                A==1
+            basedir = '/project2/ggcmi/AgMIP.output/{0}/phase2/maize/A{2}/{1}/'.format(model,var,A)
             try: 
                 da = calcWStress(model, var, Ti)
                 w_stress_list.append(da)
