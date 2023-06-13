@@ -29,8 +29,8 @@ def calcWStress(model, var, T):
 
 # model = 'LPJmL'
 # var = 'transp'
-models = ['LPJmL']#,'CARAIB','LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC', 'EPIC-TAMU']
-vars = ['trzpah2o', 'transp']
+models = ['LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC']# CARAIB, LPJmL, EPIC-TAMU
+vars = ['transp']
 
 for model in models:
     # if model in ['LPJmL','CARAIB','LPJ-GUESS','pDSSAT']:
