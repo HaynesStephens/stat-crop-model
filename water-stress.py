@@ -29,7 +29,7 @@ def calcWStress(model, var, T):
 
 # model = 'LPJmL'
 # var = 'transp'
-models = ['LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC']# CARAIB, LPJmL, EPIC-TAMU
+models = ['LPJ-GUESS','pDSSAT', 'GEPIC','PEPIC']# CARAIB, LPJmL, EPIC-TAMU Trust
 vars = ['transp']
 
 for model in models:
